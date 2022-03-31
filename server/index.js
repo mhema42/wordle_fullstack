@@ -10,6 +10,10 @@ app.get('/', function (req, res) {
 
 app.use("/testAPI", testAPIRouter);
 
+app.use("/wordle", function (req, res) {
+  res.send("hello world2!");
+});
+
 
 
 app.listen(5080);

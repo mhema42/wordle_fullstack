@@ -2,11 +2,11 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const correctWord = "wordle";
   const [text, setText] = useState("");
-  const [guesses, setGuess] = useState([
-  ]);
-  const [letters, setLetter] = useState([
-  ]);
+  const [guesses, setGuess] = useState([]);
+  const [letters, setLetter] = useState([]);
+  const [chkWord, wordle] = useState("");
 
   const onTextChange = (event) => {
     setText(event.target.value);
@@ -14,7 +14,7 @@ function App() {
     setLetter([
       ...letters,
       {
-        letter: letters,
+        letter: text,
         test: "",
       },
     ]);
@@ -32,6 +32,12 @@ function App() {
         test: "guess",
       },
     ]);
+    
+    if (text === correctWord) {
+      wordle("Your guess is correct, congratulation!");
+    }
+    else
+      wordle("");
   };
 
   const guessElements = guesses.map((guess, index) => {
@@ -60,6 +66,7 @@ function App() {
         <input type = "text" value= { text } onChange = { onTextChange } />
         <button onClick = { onClickOk }>OK</button>
         <ul>{ guessElements }</ul>
+        <span>{ chkWord }</span>
       </div>
     </div>
   );
