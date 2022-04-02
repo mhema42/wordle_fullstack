@@ -2,26 +2,15 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const correctWord = "wordle";
+  let letters
+  let correctWord = "wordle";
   const [text, setText] = useState("");
   const [guesses, setGuess] = useState([]);
-  const [letters, setLetter] = useState([]);
   const [chkWord, wordle] = useState("");
 
   const onTextChange = (event) => {
     setText(event.target.value);
-    
-    setLetter([
-      ...letters,
-      {
-        letter: text,
-        test: "",
-      },
-    ]);
   };
-
-  console.log(letters)
-
 
   const onClickOk = () => {
     setText("");
@@ -29,15 +18,40 @@ function App() {
       ...guesses,
       {
         word: text,
-        test: "guess",
       },
     ]);
     
     if (text === correctWord) {
       wordle("Your guess is correct, congratulation!");
     }
-    else
+    else {
       wordle("");
+
+      letters = text.split("").map((letter, index) => ({
+        ...index,
+          letter: letter,
+          status: "incorrect",
+      }));
+
+      correctWord = correctWord.split("").map((letter, index) => ({
+        ...index,
+          letter: letter,
+          status: "",
+      }));
+
+      console.log(correctWord)
+
+      for (let i=0; i < letters.length; i++) {
+        if (letters[i] === correctWord[i]) {
+          letters((element) => ({
+            ...element,
+            status: "correct"
+        }));
+        }
+      }
+    }
+    
+    console.log(letters)
   };
 
   const guessElements = guesses.map((guess, index) => {
