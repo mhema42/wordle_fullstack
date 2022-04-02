@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  let result
   let letters
   let correctWord = "wordle";
   const [text, setText] = useState("");
@@ -33,24 +34,35 @@ function App() {
           status: "incorrect",
       }));
 
-      correctWord = correctWord.split("").map((letter, index) => ({
-        ...index,
-          letter: letter,
-          status: "",
-      }));
-
-      console.log(correctWord)
-
-      for (let i=0; i < letters.length; i++) {
-        if (letters[i] === correctWord[i]) {
-          letters((element) => ({
-            ...element,
-            status: "correct"
-        }));
-        }
-      }
-    }
+      correctWord = correctWord.split("");
     
+      if (letters.length !== correctWord.length) {
+        wordle("your guess must contain " + correctWord.length + " letters");
+      }
+      else {
+          for (let i=0; i < letters.length; i++) {
+              if (letters[i].letter === correctWord[i]) {
+                  letters[i].status = "correct"
+                  correctWord[i] = "check"
+              };
+          };
+          letters.forEach(element => {    
+              for (let j=0; j < letters.length; j++) {
+                  if (element.status === "incorrect") {
+                      if (element.letter === correctWord[j]) {
+                          element.status = "missplaced"
+                          correctWord[j] = "check"
+                      };
+                  };
+              };
+          });
+          result = JSON.stringify(letters).replace(/{/g,"").replace(/}/g,"").replace(/"/g,"").replace(/letter:/g," ").replace(/status:/g," ");
+          wordle(JSON.stringify(letters).replace(/{/g,"").replace(/}/g,"").replace(/"/g,"").replace(/letter:/g," ").replace(/status:/g," "));    
+      };  
+      
+    }
+    console.log(result)
+    console.log(correctWord)
     console.log(letters)
   };
 
