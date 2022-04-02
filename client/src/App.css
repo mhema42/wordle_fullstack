@@ -4,3 +4,19 @@ body {
 .wordle {
     text-align: center;
 }
+
+ul span {
+    font-size: xx-large;
+}
+
+.correct {
+    color: green;
+}
+
+.incorrect {
+    color: red;
+}
+
+.missplaced {
+    color: yellow;
+}

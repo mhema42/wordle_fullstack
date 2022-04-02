@@ -2,21 +2,19 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  let result = "";
-  let letters  = [];
+  const [letters, letterResult] = useState([]);
   const [correctWord, setWord] = useState([]);
   const [text, setText] = useState("");
   const [guesses, setGuess] = useState([]);
   const [chkWord, wordle] = useState("");
 
+  // choose correct word
   const words = ["", "test", "mats", "wordle"];
-
   const whichWord = (event) => {
     setWord(words[event.target.value]);
   };
 
-  console.log(correctWord)
-
+  // input guessed word
   const onTextChange = (event) => {
     setText(event.target.value);
   };
@@ -28,24 +26,28 @@ function App() {
       {
         word: text,
       },
-    ]); 
+    ]);
+
     // check if guess is correct
     if (text === correctWord) {
       wordle("Your guess is correct, congratulation!");
     }
     else {
       wordle("");
+
       // split correctWord and guess to array
       let correctLetters = correctWord.split("");
-      letters = text.split("").map((letter, index) => ({
+      let letters = text.split("").map((letter, index) => ({
         ...index,
           letter: letter,
           status: "incorrect",
       }));
+
       // check if guess contains correct amount of letters
       if (letters.length !== correctLetters.length) {
         wordle("your guess must contain " + correctLetters.length + " letters");
       }
+
       // check if guess contains correct, incorrect or missplaced letters
       else {
           for (let i=0; i < letters.length; i++) {
@@ -64,32 +66,41 @@ function App() {
                   };
               };
           });
-          result = JSON.stringify(letters).replace(/{/g,"").replace(/}/g,"").replace(/"/g,"").replace(/letter:/g," ").replace(/status:/g," ");
+
+          letterResult(letters);
+          let result = JSON.stringify(letters).replace(/{/g,"").replace(/}/g,"").replace(/"/g,"").replace(/letter:/g," ").replace(/status:/g," ");
           wordle(JSON.stringify(letters).replace(/{/g,"").replace(/}/g,"").replace(/"/g,"").replace(/letter:/g," ").replace(/status:/g," "));    
-      };  
-      
-    }
-    console.log(result)
-    console.log(correctWord)
-    console.log(letters)
+
+          
+          // console.log(result.letter[1])          
+        };  
+    }    
   };
 
-  const guessElements = guesses.map((guess, index) => {
+  console.log(letters[0])
+
+  //const lettersElements = 
+
+  // render list elements of guesses
+  const guessElements = letters.map((guess, index) => {
     const addGuess = () => {
-      setGuess([
-        ...guesses.slice(0, index),
+      letterResult([
+        ...letters.slice(0, index),
       ]);
     };
 
     return (
-      <li key = { guess.word } className = { guess.word }>
-        <span className = "label">
-          { guess.word }
+      // <li key = { guess.letter } className = { guess.letter }>
+        <span className = { guess.status }>
+          { guess.letter }
         </span>
-      </li>
+      // </li>
     );
   });
 
+  // console.log(guesses)
+
+  // render app
   return (
     <div className="App">
       <div className="wordle">
@@ -97,7 +108,7 @@ function App() {
         <i>- a fantastic world of words -</i>
         <p>Begin by choosing number of letters in Word to guess for,</p>
         <p>and if it should contain only unique letters or not</p>
-        <input type = "text" value= { text } onChange = { whichWord } />
+        <input type = "text" value= { correctWord } onChange = { whichWord } />
         <input type = "text" value= { text } onChange = { onTextChange } />
         <button onClick = { onClickOk }>OK</button>
         <ul>{ guessElements }</ul>
